@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div style="border: 2px double red ;width: 300px;height: 20px;" id="CalArea"></div>
+    <button id="1" onclick="enterkey(1)">1</button>
+    <button id="2" onclick="enterkey(2)">2</button>
+    <button id="3" onclick="enterkey(3)">3</button>
+    <button id="4" onclick="enterkey(4)">4</button>
+    <button id="5" onclick="enterkey(5)">5</button>
+    <button id="6" onclick="enterkey(6)">6</button>
+    <button id="7" onclick="enterkey(7)">7</button>
+    <button id="8" onclick="enterkey(8)">8</button>
+    <button id="9" onclick="enterkey(9)">9</button>
+    <hr>
+    <button id="Plus" onclick="add()">+</button>
+    <button id="Sub" onclick="sub()">-</button>
+    <button id="Equa" onclick="sum()">=</button>
+    <button id="Cross" onclick="cross()">×</button>
+    <button id="Divis" onclick="divis()">÷</button>
+    <button id="Back" onclick="back()">←</button>
+    <button id="Canc" onclick="cancel()">C</button>
+
+    <script>
+        var temporary;
+        // 暫存上一個數字的變數
+        var t2;
+        // 儲存第二次輸入的數字
+        var text = 0;
+        // 紀錄用了什麼計算
+        function enterkey(n) {
+            // 假設還沒按過計算鍵
+            if (text == 0) {
+                // 更改顯示於屏幕上的數字
+                document.getElementById("CalArea").innerText = document.getElementById("CalArea").innerText + n
+                // 將屏幕數字的字串換成數字傳給 temporary，意即，只要輸入數字就會更新 teporary
+                temporary = document.getElementById("CalArea").innerText;
+                // 假設按過計算鍵了            
+            } else {
+                // 同樣更新屏幕數字
+                document.getElementById("CalArea").innerText = document.getElementById("CalArea").innerText + n
+                // 將值傳給另一個暫存變數
+                t2 = document.getElementById("CalArea").innerText;
+            }
+        }
+
+        function add() {
+            // 清空屏幕
+            document.getElementById("CalArea").innerText = "";
+            // 紀錄已經按了 +
+            text = 1;
+        }
+
+        function sub() {
+            document.getElementById("CalArea").innerText = "";
+            // 紀錄已經按了 -
+            text = 2;
+        }
+
+        function cross() {
+            document.getElementById("CalArea").innerText = "";
+            text = 3;
+        }
+
+        function Divis() {
+            document.getElementById("CalArea").innerText = "";
+            text = 4;
+        }
+
+        function back() {
+            // 去掉最後一位，並傳回暫存的變數做修正；因此需要判斷有沒有按過計算鍵
+            if (text == 0) {
+                document.getElementById("CalArea").innerText = temporary.slice(0, temporary.length - 1);
+                temporary = temporary.slice(0, temporary.length - 1);
+            } else {
+                document.getElementById("CalArea").innerText = t2.slice(0, t2.length - 1);
+                t2 = t2.slice(0, t2.length - 1);
+            }
+        }
+
+        function cancel() {
+            // 清空所有暫存
+            document.getElementById("CalArea").innerText = "";
+            temporary = "";
+            text = "";
+        }
+
+        function sum() {
+            // 判斷上一次按的計算是哪一種
+            if (text == 1) {
+                // 屏幕的字串顯示的為，暫存temporary的字串數字化+t2字串數字化
+                document.getElementById("CalArea").innerText = parseInt(temporary) + parseInt(t2);
+                // 計算完後將答案傳給temporay，以方便下一次接著按計算鍵
+                temporary = document.getElementById("CalArea").innerText
+            } else if (text == 2) {
+                document.getElementById("CalArea").innerText = parseInt(temporary) * parseInt(t2);
+                temporary = document.getElementById("CalArea").innerText
+            } else if (text == 3) {
+                document.getElementById("CalArea").innerText = parseInt(temporary) * parseInt(t2);
+                temporary = document.getElementById("CalArea").innerText
+            } else if (text == 4) {
+                document.getElementById("CalArea").innerText = parseInt(temporary) / parseInt(t2);
+                temporary = document.getElementById("CalArea").innerText
+            }
+        }
+    </script>
+</body>
+
+</html>
