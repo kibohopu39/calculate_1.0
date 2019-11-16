@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>report</title>
+</head>
+<!-- <link rel="stylesheet" href="report.css"> -->
+
+<body>
+    <div id="Calc2" style="width: 300px;height: 20px;font-size: 12px;">0</div>
+    <div id="Calc" style="border: 2px double red;width: 300px;height: 40px;">0</div>
+    <p>本計算機器，小數精度只到小數點後5位</p>
+    <button onclick="InNum('1')">1</button>
+    <button onclick="InNum('2')">2</button>
+    <button onclick="InNum('3')">3</button><br>
+    <button onclick="InNum('4')">4</button>
+    <button onclick="InNum('5')">5</button>
+    <button onclick="InNum('6')">6</button><br>
+    <button onclick="InNum('7')">7</button>
+    <button onclick="InNum('8')">8</button>
+    <button onclick="InNum('9')">9</button>
+    <button onclick="InNum('0')">0</button>
+    <button onclick="InNum('.')">.</button><br>
+    <button onclick="operate('+')">+</button>
+    <button onclick="operate('-')">-</button>
+    <button onclick="operate('*')">*</button>
+    <button onclick="operate('/')">/</button><br>
+    <button onclick="equa()">=</button>
+    <button onclick="Back()">←</button>
+    <button onclick="Cancel()">C</button>
+    <script>
+        // 將顯示窗的元素位址給temp，因此顯示窗只要字串修改，temp會聯動
+        var temp_1 = document.getElementById("Calc")
+        // 將顯示窗運算記錄的元素位址給temp2
+        var temp_2 = document.getElementById("Calc2")
+        // 運算變數(記錄上一次按的計算類別)
+        var temsig = ""
+        // 判斷有無小數點
+        function InNum(Strn) {
+            if (temp_1.innerText == "0" && Strn == 0) {
+                // 情況A.目前是初始字串"0"，且輸入0
+                console.log("已經是0了");
+            } else if (temp_1.innerText == "0" && Strn == ".") {
+                // 情況B.目前是初始字串"0"，且輸入小數點
+                temp_1.innerText += Strn;
+            } else if (temp_1.innerText == "0" && Strn !== ".") {
+                // 情況C.目前是初始字串"0"，且輸入小數點以外
+                temp_1.innerText = Strn;
+            } else if (temp_1.innerText.indexOf(".") !== -1 && Strn == ".") {
+                // 情況D.不是初始字串，有小數點，且輸入小數點
+                console.log("已經有小數點了");
+            } else {
+                // 情況E.不是初始字串，有小數點，且輸入小數點以外
+                // 情況F.不是初始字串，無小數點，且輸入任一字串
+                temp_1.innerText += Strn;
+            }
+        }
+        // 按下運算後
+        function operate(Strs) {
+            // 分成幾種情況
+            if (temp_1.innerText !== "0" && temsig == "") {
+                // 情況1.temp_2沒數字，顯示窗有數字，按了一次運算
+                temsig = Strs;
+                temp_2.innerText = temp_1.innerText + temsig;
+                // 記錄算法並更新至temp_2
+                temp_1.innerText = "0";
+            } else if (temp_1.innerText !== "0" && temsig !== "") {
+                // 情況2.temp_2有數字，顯示窗若不為0，按了一次運算
+                // 更改 temsig 與 temp2
+                temsig = Strs;
+                temp_2.innerText = temp_2.innerText.slice(0, -1) + temsig;
+                Ans();
+                temp_1.innerText = "0";
+            } else if (temp_2.innerText !== "0" && temp_1.innerText == "0" && temsig !== "") {
+                // 情況3.temp_2有數字，顯示窗為0，按了運算，即情況2改按別的運算
+                temsig = Strs;
+                temp_2.innerText = temp_2.innerText.slice(0, -1) + temsig;
+                console.log("已修改運算方式");
+            } else {
+                // 情況4.temp_2無數字，顯示窗為0，手賤按運算
+                console.log("您還沒有輸入數字");
+            }
+        }
+
+        function Ans() {
+            switch (temsig) {
+                case '+':
+                    fixNum(parseFloat(temp_2.innerText.slice(0, -1)) + parseFloat(temp_1.innerText)) + temsig;
+                    break;
+                case '-':
+                    fixNum(parseFloat(temp_2.innerText.slice(0, -1)) - parseFloat(temp_1.innerText)) + temsig;
+                    break;
+                case '*':
+                    fixNum(parseFloat(temp_2.innerText.slice(0, -1)) * parseFloat(temp_1.innerText)) + temsig;
+                    break;
+                case '/':
+                    fixNum(parseFloat(temp_2.innerText.slice(0, -1)) / parseFloat(temp_1.innerText)) + temsig;
+                    break;
+            }
+        }
+
+        function equa() {
+            if (temp_2.innerText !== "0") {
+                Ans();
+                temp_1.innerText = parseFloat(temp_2.innerText.slice(0, -1));
+                temp_2.innerText = "0";
+                temsig = "";
+                console.log(temsig);
+            } else {
+                console.log("無效");
+            }
+        }
+
+        function Back() {
+            // 去掉運算欄最末位數字
+            console.log(temp_1.innerText.slice(0. - 1))
+            if (temp_1.length == 1) {
+                temp_1 = "0";
+            } else {
+                temp_1.innerText = temp_1.innerText.slice(0,-1);
+            }
+        }
+
+        function Cancel() {
+            // 全部清空
+            document.getElementById("Calc").innerText = "0";
+            temsig = "";
+            temp_1 = document.getElementById("Calc");
+            temp_2.innerText = "0";
+        }
+
+        function fixNum(number) {
+            // 用來處理因binary儲存方式導致的運算誤差
+            temp_2.innerText = (number).toFixed(5);
+            // toFixed傳回字串
+        }
+    </script>
+</body>
+
+</html>
